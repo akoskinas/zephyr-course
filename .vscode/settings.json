@@ -1,0 +1,11 @@
+{
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "--pretty",
+        "--compile-commands-dir=zephyr-course/build",
+        "--background-index",
+        "--log=error",
+        "--header-insertion=never",
+        "--query-driver=/usr/bin/arm-none-eabi-g*"
+    ]
+}
