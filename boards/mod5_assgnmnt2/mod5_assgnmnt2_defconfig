@@ -1,0 +1,4 @@
+# enable the following symbols in order to be able to see the console output
+CONFIG_UART_CONSOLE=y
+CONFIG_CONSOLE=y
+CONFIG_SERIAL=y

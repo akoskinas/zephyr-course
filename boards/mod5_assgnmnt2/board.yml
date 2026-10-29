@@ -1,0 +1,6 @@
+board:
+  name: mod5_assgnmnt2
+  full_name: MODULE5 ASSIGNMENT2 - From Scratch
+  vendor: iomico zephyr course
+  socs:
+    - name: rw612

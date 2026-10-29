@@ -1,0 +1,5 @@
+# minimum settings needed for the hello world blinky app
+
+config BOARD_MOD5_ASSGNMNT2
+	select BOARD_EARLY_INIT_HOOK
+	select BOARD_LATE_INIT_HOOK
