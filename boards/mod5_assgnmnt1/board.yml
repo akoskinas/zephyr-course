@@ -1,0 +1,6 @@
+board:
+  name: mod5_assgnmnt1
+  full_name: MODULE5 ASSIGNMENT1
+  vendor: iomico zephyr course
+  socs:
+    - name: rw612
