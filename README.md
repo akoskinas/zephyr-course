@@ -87,7 +87,7 @@ and to flash simply use
 west flash
 ```
 
-Remark: for other boards such as the the FRDM-MCXA159, the flash operation requires `LinkServer`. Therefore, first install it and then ensure that is in the PATH.
+Remark: for other boards such as the the FRDM-MCXA156, the flash operation requires `LinkServer`. Therefore, first install it and then ensure that is in the PATH.
 As an example, if the `LinkServer` executable is in `/usr/local/LinkServer`, then:
 
 ```sh
