@@ -1,0 +1,1 @@
+add_subdirectory_ifdef(CONFIG_L6TASK1_DRIVER drivers/l6task1-driver)

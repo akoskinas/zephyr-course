@@ -1,0 +1,6 @@
+description: l6 task1 custom driver binding
+compatible: "l6task1,driver"
+
+include: base.yaml
+
+# This driver requires a GPIO device aliased as 'app_led' for LED control

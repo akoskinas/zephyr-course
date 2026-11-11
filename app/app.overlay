@@ -2,4 +2,8 @@
 	aliases {
 		app-led = &green_led;
 	};
+	my_fake_sensor: l6task1_sensor {
+		compatible = "l6task1,driver";
+		status = "okay";
+	};
 };

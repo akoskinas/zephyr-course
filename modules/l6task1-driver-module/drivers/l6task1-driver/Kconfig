@@ -1,0 +1,52 @@
+menuconfig L6TASK1_DRIVER
+	bool "L6 Task1 Driver"
+	default y
+	depends on DT_HAS_L6TASK1_DRIVER_ENABLED   # only if HW is present in the DT
+  select GPIO
+	help
+		Enable the L6 Task1 custom driver
+
+if L6TASK1_DRIVER
+
+config L6TASK1_DRIVER_INIT_PRIORITY
+    int "L6TASK1 driver initialization priority"
+    default 45
+    help
+      Initialization priority for the L6TASK1 driver.
+      Must be greater than CONFIG_GPIO_INIT_PRIORITY to ensure
+      GPIO is initialized first.
+
+choice L6TASK1_DRIVER_LOG_LEVEL
+    prompt "L6TASK1 driver log level"
+    default L6TASK1_DRIVER_LOG_LEVEL_INF
+
+config L6TASK1_DRIVER_LOG_LEVEL_NONE
+    bool "No logging"
+    help
+      No logs.
+
+config L6TASK1_DRIVER_LOG_LEVEL_ERR
+    bool "Error"
+    help
+      Only errors.
+
+config L6TASK1_DRIVER_LOG_LEVEL_WRN
+    bool "Warning"
+    
+config L6TASK1_DRIVER_LOG_LEVEL_INF
+    bool "Info"
+
+config L6TASK1_DRIVER_LOG_LEVEL_DBG
+    bool "Debug"
+
+endchoice
+
+config L6TASK1_DRIVER_LOG_LEVEL
+    int
+    default 0 if L6TASK1_DRIVER_LOG_LEVEL_NONE
+    default 1 if L6TASK1_DRIVER_LOG_LEVEL_ERR
+    default 2 if L6TASK1_DRIVER_LOG_LEVEL_WRN
+    default 3 if L6TASK1_DRIVER_LOG_LEVEL_INF
+    default 4 if L6TASK1_DRIVER_LOG_LEVEL_DBG
+
+endif # L6TASK1_DRIVER

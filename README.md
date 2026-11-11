@@ -105,6 +105,51 @@ In this case, the "Board Initialized" message can be seen:
 
 ![Board setup](assets/screenshots/board_initialized_message.png)
 
+## Custom driver implementation
+
+Remark: in the video presentation there is `zephyr/module.yml` used. It is unclear if the `zephyr_library()` and `zephyr_library_sources()` are used instead or if they should be used anyway.
+TODO: Make sure to create a `zephyr/module.yml` for learning purposes
+
+## Open questions
+
+- How to express dependency between a driver and a protocol (such as I2C) or GPIO pins?
+  - in the driver implementation of the sensor in the [linked article](https://bootlin.com/blog/zephyr-implementing-a-device-driver-for-a-sensor/) as well as in the slides:
+
+    ```Kconfig
+        # inside the driver's Kconfig
+        config LSM9DS1
+            bool "LSM9DS1 I2C accelerometer and gyroscope chip"
+            default y
+            depends on DT_HAS_ST_LSM9DS1_ENABLED
+            select I2C # expresses the dependency to the I2C and auto-pulls dependencies
+    ```
+
+  - for the L6-Task1 using `select GPIO` alone **wasn't sufficient**, as the LED on the board wasn't blinking. Instead explicitly defining a higher priority was necessary, at least for the FRDM-MXCA156 board
+  - similarly, as best practice, is there a way to express the comment in the `l6task1,driver.yaml` in a way Zephyr understands?
+  `# This driver requires a GPIO device aliased as 'app_led' for LED control`
+
+- Is possible to reference another Kconfig symbol from within a range of another Kconfig symbol?
+  Example: the following doesn't build
+
+  ```Kconfig
+    menuconfig L6TASK1_DRIVER
+        bool "L6 Task1 Driver"
+        default y
+        depends on DT_HAS_L6TASK1_DRIVER_ENABLED
+        help
+            Enable the L6 Task1 custom driver for the I2C peripheral
+
+    if L6TASK1_DRIVER
+
+    config L6TASK1_DRIVER_INIT_PRIORITY
+        int "L6TASK1 driver initialization priority"
+        default CONFIG_GPIO_INIT_PRIORITY
+        help
+            Initialization priority for the L6TASK1 driver.
+
+    endif # L6TASK1_DRIVER
+  ```
+
 ## Further resources
 
 - [Getting Started Guide - Zephyr 4.2.0 documentation](https://docs.zephyrproject.org/4.2.0/develop/getting_started/index.html)

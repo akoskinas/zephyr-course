@@ -1,37 +1,23 @@
-#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/sensor.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
-
-#define LED_NODE DT_ALIAS(app_led)
-// #define LED_NODE DT_ALIAS(led0)
-
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED_NODE, gpios);
+#include <stdio.h>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
+// get a handle to the fake sensor device
+static const struct device *p_my_fake_sensor = DEVICE_DT_GET(DT_NODELABEL(my_fake_sensor));
+
+
 int main(void)
 {
-    bool led_state = true;
-
-    if (!gpio_is_ready_dt(&led))
-    {
-        return 0;
-    }
-
-    if (gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE) < 0)
-    {
-        return 0;
-    }
-
     while (1)
     {
-        if (gpio_pin_toggle_dt(&led) < 0)
-        {
-            return 0;
-        }
-
-        led_state = !led_state;
-        LOG_INF("LED state: %s", led_state ? "ON" : "OFF");
+        // turn on LED
+        sensor_sample_fetch(p_my_fake_sensor);
+        k_msleep(CONFIG_APP_HEARTBEAT_PERIOD);
+        // Turn off LED
+        sensor_channel_get(p_my_fake_sensor, SENSOR_CHAN_ALL, NULL);
         k_msleep(CONFIG_APP_HEARTBEAT_PERIOD);
     }
     return 0;
