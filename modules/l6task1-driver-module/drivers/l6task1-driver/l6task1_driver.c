@@ -1,3 +1,4 @@
+#include <l6task1-driver/l6task2_driver.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/sensor.h>
@@ -97,11 +98,53 @@ static DEVICE_API(sensor, l6task1_driver_api) = {
     .channel_get  = l6task1_driver_channel_get,
 };
 
+// implementation of the L6 Task2 driver custom API functions
+void l6task2_driver_custom_api_function_incr_sample_fetch_cnt(const struct device* dev)
+{
+    LOG_INF("l6task2_driver_custom_api_function_incr_sample_fetch_cnt called for %s", dev->name);
+    // cast the device data to the L6 Task2 driver data structure
+    struct l6task2_driver_data* data = dev->data;
+    if (data)
+    {
+        data->counter_of_sample_fetch_calls++;
+        LOG_INF("Sample fetch counter incremented to %d", data->counter_of_sample_fetch_calls);
+    }
+    else
+    {
+        LOG_ERR("dev->data is NULL for %s - cannot increment counter", dev->name);
+    }
+}
+
+void l6task2_driver_custom_api_function_incr_channel_get_cnt(const struct device* dev)
+{
+    LOG_INF("l6task2_driver_custom_api_function_incr_channel_get_cnt called for %s", dev->name);
+    // cast the device data to the L6 Task2 driver data structure
+    struct l6task2_driver_data* data = dev->data;
+    if (data)
+    {
+        data->counter_of_channel_get_calls++;
+        LOG_INF("Channel get counter incremented to %d", data->counter_of_channel_get_calls);
+    }
+    else
+    {
+        LOG_ERR("dev->data is NULL for %s - cannot increment counter", dev->name);
+    }
+}
+
 // Ensure that the L6TASK1 driver initialization priority is greater than the GPIO initialization priority
-BUILD_ASSERT(CONFIG_L6TASK1_DRIVER_INIT_PRIORITY > CONFIG_GPIO_INIT_PRIORITY, "L6TASK1 driver init priority must be greater than GPIO init priority");
+BUILD_ASSERT(CONFIG_L6TASK1_DRIVER_INIT_PRIORITY > CONFIG_GPIO_INIT_PRIORITY,
+             "L6TASK1 driver init priority must be greater than GPIO init priority");
 
 // Helper macro to define L6 Task1 driver instances
-#define L6TASK1_DRIVER_DEFINE(inst) \
-    DEVICE_DT_INST_DEFINE(inst, l6task1_driver_init, NULL, NULL, NULL, POST_KERNEL, CONFIG_L6TASK1_DRIVER_INIT_PRIORITY, &l6task1_driver_api);
+#define L6TASK1_DRIVER_DEFINE(inst)                                                                                    \
+    static struct l6task2_driver_data l6task2_data_##inst;                                                             \
+    DEVICE_DT_INST_DEFINE(inst,                                                                                        \
+                          l6task1_driver_init,                                                                         \
+                          NULL,                                                                                        \
+                          &l6task2_data_##inst,                                                                        \
+                          NULL,                                                                                        \
+                          POST_KERNEL,                                                                                 \
+                          CONFIG_L6TASK1_DRIVER_INIT_PRIORITY,                                                         \
+                          &l6task1_driver_api);
 
 DT_INST_FOREACH_STATUS_OKAY(L6TASK1_DRIVER_DEFINE);

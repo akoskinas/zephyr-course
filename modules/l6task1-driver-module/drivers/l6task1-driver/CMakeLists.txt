@@ -1,4 +1,5 @@
 if(CONFIG_L6TASK1_DRIVER)
   zephyr_library()
   zephyr_library_sources(l6task1_driver.c)
+  zephyr_include_directories(../../include)
 endif()
