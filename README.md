@@ -118,6 +118,7 @@ minicom -D /dev/tty<add here the device name> --color=on
 l7_custom_shell_cmds fetch l6task1_sensor
 l7_custom_shell_cmds read l6task1_sensor
 l7_custom_shell_cmds info l6task1_sensor
+l7_custom_shell_cmds set l6task1_sensor <value in range [0-3]>
 ```
 
 ## Open questions
