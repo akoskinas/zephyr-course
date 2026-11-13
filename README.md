@@ -105,10 +105,20 @@ In this case, the "Board Initialized" message can be seen:
 
 ![Board setup](assets/screenshots/board_initialized_message.png)
 
-## Custom driver implementation
+Another way to communicate with the board is to use `minicom`. This utility can be installed natively only on Linux.
+Then, simply open a terminal and then:
 
-Remark: in the video presentation there is `zephyr/module.yml` used. It is unclear if the `zephyr_library()` and `zephyr_library_sources()` are used instead or if they should be used anyway.
-TODO: Make sure to create a `zephyr/module.yml` for learning purposes
+```bash
+minicom -D /dev/tty<add here the device name> --color=on
+```
+
+## Custom shell commands
+
+```bash
+l7_custom_shell_cmds fetch l6task1_sensor
+l7_custom_shell_cmds read l6task1_sensor
+l7_custom_shell_cmds info l6task1_sensor
+```
 
 ## Open questions
 
