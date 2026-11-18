@@ -54,6 +54,22 @@ ZTEST(ring_buf_init, test_reinit_clears_state)
     zassert_equal(rb_count(), 0, "Fresh buffer count must be 0");
 }
 
+ZTEST(ring_buf_init, test_init_with_zero_capacity_returns_error)
+{
+    // precondition -> none
+
+    // input & expected result
+    zassert_equal(rb_init(0), -EINVAL);
+}
+
+ZTEST(ring_buf_init, test_init_with_excessive_capacity_returns_error)
+{
+    // precondition -> none
+
+    // input & expected result
+    zassert_equal(rb_init(RING_BUF_MAX_CAPACITY + 1), -EINVAL);
+}
+
 /*
  * ============================================================================
  * Test Suite: ring_buf_push_pop
@@ -112,6 +128,16 @@ ZTEST(ring_buf_push_pop, test_push_full_returns_enospc)
     zassert_equal(rb_push(5), -ENOSPC);
 }
 
+ZTEST(ring_buf_push_pop, test_pop_on_empty_buf_returns_error)
+{
+    int popped_value = -1;
+    // precondition -> empty buffer
+
+    // input -> pop from empty buffer and expected value
+    zassert_equal(rb_pop(&popped_value), -ENODATA);
+    zassert_equal(popped_value, -1);
+}
+
 /*
  * ============================================================================
  * Test Suite: ring_buf_boundaries
@@ -156,4 +182,22 @@ ZTEST(ring_buf_boundaries, test_is_full_after_fill)
 
     // input & expected
     zassert_true(rb_is_full());
+}
+
+ZTEST(ring_buf_boundaries, test_peek_with_null_ptr_returns_error)
+{
+    // precondition -> none
+
+    // input & expected
+    zassert_equal(rb_peek(NULL), -EINVAL);
+}
+
+ZTEST(ring_buf_boundaries, test_peek_with_empty_buf_returns_error)
+{
+    int peeked_value = -1;
+    // precondition -> none
+
+    // input & expected
+    zassert_equal(rb_peek(&peeked_value), -ENODATA);
+	zassert_equal(peeked_value, -1);
 }
